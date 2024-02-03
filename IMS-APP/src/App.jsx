@@ -1,10 +1,10 @@
 import React from 'react'
-import PersistentDrawerLeft from './componenets/drawer/Drawer'
+import Admission from './screens/admission-form/Admission'
 
 const App = () => {
   return (
     <div>
-      {/* <PersistentDrawerLeft /> */}
+      <Admission />
     </div>
   )
 }
