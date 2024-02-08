@@ -12,7 +12,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useRef } from "react";
+// import { useRef } from "react";
+
+
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -25,34 +27,6 @@ function Copyright(props) {
     </Typography>
   );
 }
-
-
-
-// use  ref
-
-const email = useRef
-
-
-
-
-// login function  
-const logifunc = (event)=>{
-event.preventDefault();
-console.log('clicked');
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
@@ -66,6 +40,11 @@ export default function SignUp() {
       password: data.get('password'),
     });
   };
+
+
+
+
+
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -85,7 +64,7 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign In
           </Typography>
-          <Box component="form" noValidate onSubmit={logifunc} sx={{ mt: 3 }}>
+          <Box component="form" noValidate sx={{ mt: 3 }}>
             <Grid container spacing={2}>
             
               <Grid item xs={12}>
@@ -112,7 +91,7 @@ export default function SignUp() {
               <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
+                  label="Remember me"
                 />
               </Grid>
             </Grid>
@@ -126,8 +105,8 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account?   
+                <Link to  href="/admission" variant="body2">
+                  don't have an account?   
                 </Link>
               </Grid>
             </Grid>
