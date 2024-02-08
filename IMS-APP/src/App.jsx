@@ -1,10 +1,10 @@
 import React from 'react'
-import Admission from './screens/admission-form/Admission'
+import Protectedroutes from './config/routerconfug/protectedroutes'
 
 const App = () => {
   return (
     <div>
-      <Admission />
+      <Protectedroutes />
     </div>
   )
 }

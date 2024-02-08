@@ -1,11 +1,11 @@
 import React from 'react';
-import logoss from "./images/Logo.jpg";
+// import logoss from "./images/";
 
 const Admission = () => {
   return (
     <>
       <div>
-        <img src={logoss} alt="logo" />
+        {/* <img src={logoss} alt="logo" /> */}
       </div>
       <form>
         {/* Your form elements go here */}
