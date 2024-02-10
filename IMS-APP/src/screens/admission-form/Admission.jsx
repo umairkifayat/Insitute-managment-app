@@ -11,6 +11,7 @@ import {
   Select,
 } from '@mui/material';
 import { signUpUser } from '../../config/firebaseconfig/firebasemethods';
+import { useNavigate } from 'react-router-dom';
 // import { signUpUser } from '../../config/firebase/firebasemethods';
 
 const Admission = () => {
@@ -24,6 +25,8 @@ const Admission = () => {
     days: '', // Changed from 'formData.course'
     image: null,
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,12 +43,17 @@ const Admission = () => {
     }));
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    signUpUser( formData)
+    signUpUser({ ...formData, Type: 'student' })
+    .then((res) => {
+        navigate('/student')
+      }).catch((error) => {
+        alert(error)
+      })
   };
 
-  const consollingvalue = (e) =>{
+  const consollingvalue = (e) => {
     e.preventDefault();
   }
 
@@ -153,7 +161,7 @@ const Admission = () => {
             )}
           </Grid>
           <Grid item xs={12}>
-            <Button  href="/student" variant="contained" color="primary" type="submit">
+            <Button variant="contained" color="primary" type="submit">
               Submit
             </Button>
           </Grid>

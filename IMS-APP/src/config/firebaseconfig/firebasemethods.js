@@ -96,22 +96,25 @@ const sendData = (obj, colName) => {
 };
 
 //get data with id from firestore
-const getData = (colName) => {
+const getData = (colName, uid) => {
   return new Promise(async (resolve, reject) => {
-    const dataArr = []
-    const q = query(
-      collection(db, colName),
-      where("id", "==", auth.currentUser.uid)
-    );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      dataArr.push(doc.data())
-      resolve(dataArr);
-    });
-    reject("error occured");
-  });
-};
+    try {
+      const dataArr = [];
+      const q = query(collection(db, colName), where("uid", "==", uid));
+      const querySnapshot = await getDocs(q);
 
+      querySnapshot.forEach((doc) => {
+        dataArr.push(doc.data());
+      });
+
+      // Resolve the promise after iterating through all documents
+      resolve(dataArr);
+    } catch (error) {
+      // Reject the promise in case of an error
+      reject(error.message);
+    }
+  });
+}
 //get all data
 const getAllData = (colName) => {
   return new Promise(async (resolve, reject) => {

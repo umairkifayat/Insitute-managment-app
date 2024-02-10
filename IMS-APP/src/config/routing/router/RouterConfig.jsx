@@ -8,13 +8,12 @@ const RouterConfig = () => {
   return (
     <>
       <BrowserRouter >
+      
         <Routes>
           <Route path='' element={<SignUp />} />
           <Route path='/admission' element={<Admission />} />
           <Route path='/student' element={<Student />} />
-
-
-        </Routes>
+          </Routes>
       </BrowserRouter>
     </>
   )
