@@ -22,7 +22,7 @@ const Student = () => {
   return (
     <>
      
-      {console.log(arr)}
+      {/* {console.log(arr)} */}
 
     
       {arr.map((item, index) => (

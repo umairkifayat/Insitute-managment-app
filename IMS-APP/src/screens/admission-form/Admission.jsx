@@ -1,3 +1,4 @@
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import React, { useState } from 'react';
 import {
   Container,
@@ -12,6 +13,7 @@ import {
 } from '@mui/material';
 import { signUpUser } from '../../config/firebaseconfig/firebasemethods';
 import { useNavigate } from 'react-router-dom';
+import { storage } from "../../config/firebaseconfig/firebase";
 // import { signUpUser } from '../../config/firebase/firebasemethods';
 
 const Admission = () => {
@@ -43,15 +45,41 @@ const Admission = () => {
     }));
   };
 
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    signUpUser({ ...formData, Type: 'student' })
-    .then((res) => {
-        navigate('/student')
-      }).catch((error) => {
-        alert(error)
-      })
+  
+    try {
+      // Sign up the user
+      const res = await signUpUser({ ...formData, Type: 'student' ,Url:imageUrl});
+  
+      // Upload image to Firebase Storage
+      const storageRef = ref(storage, `${res.email}/${res.image}`);
+      await uploadBytes(storageRef, res.image);
+  
+      // Get download URL for the uploaded image
+      const imageUrl = await getDownloadURL(storageRef);
+  
+      console.log(imageUrl);
+  
+      // Navigate to '/student'
+      navigate('/student');
+    } catch (error) {
+      console.error('Error during form submission:', error);
+      alert('An error occurred during form submission.');
+    }
   };
+  
 
   const consollingvalue = (e) => {
     e.preventDefault();
@@ -149,17 +177,18 @@ const Admission = () => {
             </FormControl>
           </Grid>
           <Grid item xs={12}>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-            />
+            <input type="file"  />
+            {formData.image && (
+              <img src={URL.createObjectURL(formData.image)} alt="Selected" style={{ maxWidth: '100%' }} />
+            )}
           </Grid>
+        
           <Grid item xs={12}>
             {formData.image && (
               <img src={formData.image} alt="Selected" style={{ maxWidth: '100%' }} />
             )}
           </Grid>
+       
           <Grid item xs={12}>
             <Button variant="contained" color="primary" type="submit">
               Submit

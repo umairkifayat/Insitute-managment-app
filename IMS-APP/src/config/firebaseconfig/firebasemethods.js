@@ -4,7 +4,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import app from "./firebase.js";
+import app, { storage } from "./firebase.js";
 import {
   getFirestore,
   collection,
@@ -16,6 +16,7 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const auth = getAuth(app);
 
@@ -30,6 +31,8 @@ const signUpUser = (formData) => {
       .then(async (res) => {
         resolve((formData.uid = res.user.uid));
         delete formData.password;
+        delete formData.image;
+
         const dbObj = {
           ...formData,
           uid: res.user.uid
@@ -151,7 +154,7 @@ const updateDocument = async (obj, id, name) => {
 // const files = profile.files[0]
 const addImageToStorage = (files , email)=>{
   return new Promise((resolve , reject)=>{
-    const storageRef = ref(storage, email.value);
+    const storageRef = ref(storage, email);
     uploadBytes(storageRef, files).then(() => {
         getDownloadURL(storageRef).then((url) => {
             console.log(url);
