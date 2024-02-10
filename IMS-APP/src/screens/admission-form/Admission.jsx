@@ -42,13 +42,7 @@ const Admission = () => {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-    // You can add form submission logic here
-    signUpUser({
-      email : formData.email,
-      password : formData.password
-    })
-    
-    console.log(formData);
+    signUpUser( formData)
   };
 
   const consollingvalue = (e) =>{
