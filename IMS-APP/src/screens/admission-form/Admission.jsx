@@ -1,5 +1,4 @@
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Container,
   TextField,
@@ -11,20 +10,18 @@ import {
   InputLabel,
   Select,
 } from '@mui/material';
-import { signUpUser } from '../../config/firebaseconfig/firebasemethods';
+import { addImageToStorage, signUpUser } from '../../config/firebaseconfig/firebasemethods';
 import { useNavigate } from 'react-router-dom';
-import { storage } from "../../config/firebaseconfig/firebase";
-// import { signUpUser } from '../../config/firebase/firebasemethods';
 
 const Admission = () => {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     password: '',
-    phone: '', // Added phone field
+    phone: '',
     address: '',
     course: '',
-    days: '', // Changed from 'formData.course'
+    days: '',
     image: null,
   });
 
@@ -39,52 +36,33 @@ const Admission = () => {
   };
 
   const handleImageChange = (e) => {
+    const file = e.target.files[0];
     setFormData((prevFormData) => ({
       ...prevFormData,
-      image: URL.createObjectURL(e.target.files[0]),
+      image: file,
     }));
   };
 
-
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
   
     try {
-      // Sign up the user
-      const res = await signUpUser({ ...formData, Type: 'student' ,Url:imageUrl});
-  
-      // Upload image to Firebase Storage
-      const storageRef = ref(storage, `${res.email}/${res.image}`);
-      await uploadBytes(storageRef, res.image);
-  
-      // Get download URL for the uploaded image
-      const imageUrl = await getDownloadURL(storageRef);
-  
-      console.log(imageUrl);
-  
-      // Navigate to '/student'
-      navigate('/student');
+      // Upload the image to storage and get the download URL
+      const imageUrl = await addImageToStorage(formData.image, formData.email);
+// console.log(imageUrl);
+      // Sign up the user with the image URL included in the data
+      const studentdata = { ...formData, Type: 'student', url: imageUrl };
+      await signUpUser(studentdata);
+
+      // Optionally, you can do something with the userData here
+
+      // Navigate to '/student' or wherever you want to navigate
+      // navigate('/student');
     } catch (error) {
       console.error('Error during form submission:', error);
       alert('An error occurred during form submission.');
     }
   };
-  
-
-  const consollingvalue = (e) => {
-    e.preventDefault();
-  }
-
   return (
     <Container maxWidth="sm">
       <Typography variant="h4" align="center" gutterBottom>
@@ -177,15 +155,9 @@ const Admission = () => {
             </FormControl>
           </Grid>
           <Grid item xs={12}>
-            <input type="file"  />
+            <input type="file" onChange={handleImageChange} />
             {formData.image && (
               <img src={URL.createObjectURL(formData.image)} alt="Selected" style={{ maxWidth: '100%' }} />
-            )}
-          </Grid>
-        
-          <Grid item xs={12}>
-            {formData.image && (
-              <img src={formData.image} alt="Selected" style={{ maxWidth: '100%' }} />
             )}
           </Grid>
        

@@ -25,20 +25,20 @@ const db = getFirestore(app);
 
 // register user
 
-const signUpUser = (formData) => {
+const signUpUser = (studentdata) => {
   return new Promise((resolve, reject) => {
-    createUserWithEmailAndPassword(auth, formData.email,formData.password)
+    createUserWithEmailAndPassword(auth, studentdata.email,studentdata.password)
       .then(async (res) => {
-        resolve((formData.uid = res.user.uid));
-        delete formData.password;
-        delete formData.image;
+        resolve((studentdata.uid = res.user.uid));
+        delete studentdata.password;
 
         const dbObj = {
-          ...formData,
+          ...studentdata,
           uid: res.user.uid
         }
         await addDoc(collection(db, "Student"), dbObj)
           .then((res) => {
+            console.log(res);
             console.log("user added to database successfully");
           })
           .catch((err) => {
@@ -107,7 +107,7 @@ const getData = (colName, uid) => {
       const querySnapshot = await getDocs(q);
 
       querySnapshot.forEach((doc) => {
-        dataArr.push(doc.data());
+        dataArr.push(doc.data(), );
       });
 
       // Resolve the promise after iterating through all documents
@@ -152,10 +152,10 @@ const updateDocument = async (obj, id, name) => {
 }
 
 // const files = profile.files[0]
-const addImageToStorage = (files , email)=>{
+const addImageToStorage = (file , email)=>{
   return new Promise((resolve , reject)=>{
     const storageRef = ref(storage, email);
-    uploadBytes(storageRef, files).then(() => {
+    uploadBytes(storageRef, file).then(() => {
         getDownloadURL(storageRef).then((url) => {
             console.log(url);
             resolve(url);
