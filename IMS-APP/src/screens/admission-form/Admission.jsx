@@ -43,26 +43,28 @@ const Admission = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
   
-    try {
-      // Upload the image to storage and get the download URL
-      const imageUrl = await addImageToStorage(formData.image, formData.email);
-// console.log(imageUrl);
-      // Sign up the user with the image URL included in the data
-      const studentdata = { ...formData, Type: 'student', url: imageUrl };
-      await signUpUser(studentdata);
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-      // Optionally, you can do something with the userData here
+  try {
+    // Upload the image to storage and get the download URL
+    
+    // Sign up the user and add user data to Firestore
+    // const imageUrl = await addImageToStorage(formData.image, formData.email);
+    const studentdata = { ...formData, Type: "student" };
+    await signUpUser(studentdata, formData);
 
-      // Navigate to '/student' or wherever you want to navigate
-      // navigate('/student');
-    } catch (error) {
-      console.error('Error during form submission:', error);
-      alert('An error occurred during form submission.');
-    }
-  };
+    // Optionally, you can do something with the userData here
+
+    // Navigate to '/student' or wherever you want to navigate
+    // navigate('/student');
+  } catch (error) {
+    console.error("Error during form submission:", error);
+    alert("An error occurred during form submission.");
+  }
+};
+
   return (
     <Container maxWidth="sm">
       <Typography variant="h4" align="center" gutterBottom>

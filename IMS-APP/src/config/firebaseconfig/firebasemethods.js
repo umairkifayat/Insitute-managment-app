@@ -25,12 +25,14 @@ const db = getFirestore(app);
 
 // register user
 
-const signUpUser = (studentdata) => {
+const signUpUser = (studentdata, formData) => {
   return new Promise((resolve, reject) => {
-    createUserWithEmailAndPassword(auth, studentdata.email,studentdata.password)
+    createUserWithEmailAndPassword(auth, formData.email,formData.password)
       .then(async (res) => {
-        resolve((studentdata.uid = res.user.uid));
+        resolve((formData.uid = res.user.uid));
+        delete formData.password;
         delete studentdata.password;
+
 
         const dbObj = {
           ...studentdata,
