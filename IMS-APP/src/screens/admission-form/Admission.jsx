@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Container,
   TextField,
@@ -42,27 +42,25 @@ const Admission = () => {
       image: file,
     }));
   };
+  
+  
+  // useEffect ( async ()=>{
+  //   const imageUrl = await addImageToStorage(formData.image, formData.email);
 
+
+  // },[])
   
 const handleSubmit = async (e) => {
   e.preventDefault();
 
-  try {
-    // Upload the image to storage and get the download URL
-    
-    // Sign up the user and add user data to Firestore
-    // const imageUrl = await addImageToStorage(formData.image, formData.email);
+  
     const studentdata = { ...formData, Type: "student" };
-    await signUpUser(studentdata, formData);
-
-    // Optionally, you can do something with the userData here
-
-    // Navigate to '/student' or wherever you want to navigate
+   signUpUser(studentdata, formData)
     // navigate('/student');
-  } catch (error) {
+
     console.error("Error during form submission:", error);
     alert("An error occurred during form submission.");
-  }
+ 
 };
 
   return (
