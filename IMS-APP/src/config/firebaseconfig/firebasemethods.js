@@ -18,6 +18,7 @@ import {
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
+
 const auth = getAuth(app);
 
 //initialize firestore database
@@ -25,22 +26,18 @@ const db = getFirestore(app);
 
 // register user
 
-const signUpUser = (studentdata, formData) => {
+let signUpUser = (formData) => {
   return new Promise((resolve, reject) => {
-    createUserWithEmailAndPassword(auth, formData.email,formData.password)
+    createUserWithEmailAndPassword(auth, formData.email, formData.password)
       .then(async (res) => {
         resolve((formData.uid = res.user.uid));
         delete formData.password;
-        delete studentdata.password;
-
-
         const dbObj = {
-          ...studentdata,
+          ...formData,
           uid: res.user.uid
         }
-        await addDoc(collection(db, "Student"), dbObj)
+        await addDoc(collection(db, "users"), dbObj)
           .then((res) => {
-            console.log(res);
             console.log("user added to database successfully");
           })
           .catch((err) => {
@@ -101,25 +98,22 @@ const sendData = (obj, colName) => {
 };
 
 //get data with id from firestore
-const getData = (colName, uid) => {
+const getData = (colName) => {
   return new Promise(async (resolve, reject) => {
-    try {
-      const dataArr = [];
-      const q = query(collection(db, colName), where("uid", "==", uid));
-      const querySnapshot = await getDocs(q);
-
-      querySnapshot.forEach((doc) => {
-        dataArr.push(doc.data(), );
-      });
-
-      // Resolve the promise after iterating through all documents
+    const dataArr = []
+    const q = query(
+      collection(db, colName),
+      where("id", "==", auth.currentUser.uid)
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      dataArr.push(doc.data())
       resolve(dataArr);
-    } catch (error) {
-      // Reject the promise in case of an error
-      reject(error.message);
-    }
+    });
+    reject("error occured");
   });
-}
+};
+
 //get all data
 const getAllData = (colName) => {
   return new Promise(async (resolve, reject) => {
