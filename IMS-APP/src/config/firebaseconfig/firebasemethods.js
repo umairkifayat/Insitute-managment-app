@@ -32,11 +32,13 @@ let signUpUser = (formData) => {
       .then(async (res) => {
         resolve((formData.uid = res.user.uid));
         delete formData.password;
+        delete formData.image;
+
         const dbObj = {
           ...formData,
-          uid: res.user.uid
+          uid: res.user.uid,
         }
-        await addDoc(collection(db, "users"), dbObj)
+        await addDoc(collection(db, "student"), dbObj)
           .then((res) => {
             console.log("user added to database successfully");
           })
@@ -148,7 +150,7 @@ const updateDocument = async (obj, id, name) => {
 }
 
 // const files = profile.files[0]
-const addImageToStorage = (file , email)=>{
+const addImageToStorage = (file , email )=>{
   return new Promise((resolve , reject)=>{
     const storageRef = ref(storage, email);
     uploadBytes(storageRef, file).then(() => {

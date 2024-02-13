@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Grid } from '@mui/material';
+import { addImageToStorage, signUpUser } from '../../config/firebaseconfig/firebasemethods';
 
 const Admission = () => {
   const [formData, setFormData] = useState({
@@ -32,7 +33,11 @@ const Admission = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    signUpUser(formData)
     // Handle form submission here, e.g., send data to server
+    const img = formData.image;
+    const imageurl = addImageToStorage(img , formData.email)
+    console.log(imageurl);
     console.log(formData);
   };
 
@@ -100,20 +105,6 @@ const Admission = () => {
               label="Timing"
               name="timing"
               value={formData.timing}
-              onChange={handleChange}
-            >
-              <option value="MWF">MWF (Monday, Wednesday, Friday)</option>
-              <option value="TTS">TTS (Tuesday, Thursday, Saturday)</option>
-            </TextField>
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              select
-              variant="outlined"
-              label="Select Course"
-              name="timing"
-              value={formData.selectedCourse}
               onChange={handleChange}
             >
               <option value="MWF">MWF (Monday, Wednesday, Friday)</option>
