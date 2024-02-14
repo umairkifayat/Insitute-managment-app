@@ -26,16 +26,16 @@ const db = getFirestore(app);
 
 // register user
 
-let signUpUser = (formData) => {
+let signUpUser = (updatedFormData) => {
   return new Promise((resolve, reject) => {
-    createUserWithEmailAndPassword(auth, formData.email, formData.password)
+    createUserWithEmailAndPassword(auth, updatedFormData.email, updatedFormData.password)
       .then(async (res) => {
-        resolve((formData.uid = res.user.uid));
-        delete formData.password;
-        delete formData.image;
+        resolve((updatedFormData.uid = res.user.uid));
+        delete updatedFormData.password;
+        // delete formData.image;
 
         const dbObj = {
-          ...formData,
+          ...updatedFormData,
           uid: res.user.uid,
         }
         await addDoc(collection(db, "student"), dbObj)

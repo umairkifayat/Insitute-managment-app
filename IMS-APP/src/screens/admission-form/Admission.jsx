@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Grid } from '@mui/material';
 import { addImageToStorage, signUpUser } from '../../config/firebaseconfig/firebasemethods';
+import {useNavigate } from 'react-router-dom';
 
 const Admission = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,8 @@ const Admission = () => {
     image: null,
   });
 
+
+  const navigate = useNavigate()
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -31,14 +34,18 @@ const Admission = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    signUpUser(formData)
-    // Handle form submission here, e.g., send data to server
     const img = formData.image;
-    const imageurl = addImageToStorage(img , formData.email)
+    const imageurl = await addImageToStorage(img, formData.email); // wait for image upload
+    const updatedFormData = {
+      ...formData,
+      image: imageurl, // replace image file with URL
+    };
+    signUpUser(updatedFormData); // send updated form data with image URL
+    navigate('./student')
     console.log(imageurl);
-    console.log(formData);
+    console.log(updatedFormData);
   };
 
   return (

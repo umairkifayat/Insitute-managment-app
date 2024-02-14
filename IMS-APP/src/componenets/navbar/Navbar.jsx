@@ -21,7 +21,7 @@ export default function MenuAppBar({ data }) {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ backgroundColor: 'black' }}>
+      <AppBar position="static" sx={{ backgroundColor: '#1976d2' }}>
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
 
           {/* Menu Icon (on the left) */}
@@ -40,13 +40,14 @@ export default function MenuAppBar({ data }) {
             Welcome To LMS
           </Typography>
 
-          {/* Logout Image (on the right) */}
-          <img
-            src={data.image}
-            alt="Logout"
-            style={{ height: 40, marginLeft: 2, cursor: 'pointer' }}
+          {/* Logout Button (on the right) */}
+          <Button
+            variant="contained"
             onClick={handleOpenModal}
-          />
+            sx={{ mr: 2, backgroundColor: '#f44336', textTransform: 'none' }}
+          >
+            Logout
+          </Button>
 
           {/* Logout Modal */}
           <Dialog open={openModal} onClose={handleCloseModal}>
